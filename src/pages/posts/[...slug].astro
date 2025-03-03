@@ -1,6 +1,7 @@
 ---
 import path from 'node:path'
 import { getCollection } from 'astro:content'
+import PostComments from '@components/PostComments.astro'
 import License from '@components/misc/License.astro'
 import Markdown from '@components/misc/Markdown.astro'
 import I18nKey from '@i18n/i18nKey'
@@ -41,7 +42,9 @@ const jsonLd = {
     url: Astro.site,
   },
   datePublished: formatDateToYYYYMMDD(entry.data.published),
-  inLanguage: (entry.data.lang ? entry.data.lang.replace('_', '-') : siteConfig.lang.replace('_', '-')),
+  inLanguage: entry.data.lang
+    ? entry.data.lang.replace('_', '-')
+    : siteConfig.lang.replace('_', '-'),
   // TODO include cover image here
 }
 ---
@@ -106,6 +109,7 @@ const jsonLd = {
 
             {licenseConfig.enable && <License title={entry.data.title} slug={entry.slug} pubDate={entry.data.published} class="mb-6 rounded-xl license-container onload-animation"></License>}
 
+            <PostComments />
         </div>
     </div>
 

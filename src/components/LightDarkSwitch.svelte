@@ -14,13 +14,49 @@ import { onMount } from 'svelte'
 const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE, AUTO_MODE]
 let mode: LIGHT_DARK_MODE = $state(AUTO_MODE)
 
+// 获取系统主题
+function getSystemTheme(): 'light' | 'dark' {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light'
+}
+
+// 更新 Giscus 主题
+function updateGiscusTheme(newMode: LIGHT_DARK_MODE) {
+  let giscusTheme: 'light' | 'dark'
+  if (newMode === AUTO_MODE) {
+    giscusTheme = getSystemTheme() // 根据系统主题设置
+  } else {
+    giscusTheme = newMode === DARK_MODE ? 'dark' : 'light'
+  }
+
+  const giscus = document.querySelector(
+    'iframe.giscus-frame',
+  ) as HTMLIFrameElement
+  if (giscus) {
+    giscus.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme: giscusTheme } } },
+      'https://giscus.app',
+    )
+  } else {
+    setTimeout(() => updateGiscusTheme(newMode), 500)
+  }
+}
+
 onMount(() => {
   mode = getStoredTheme()
+  applyThemeToDocument(mode)
+  updateGiscusTheme(mode) // 初始化时设置 Giscus 主题
+
+  // 监听系统主题变化
   const darkModePreference = window.matchMedia('(prefers-color-scheme: dark)')
   const changeThemeWhenSchemeChanged: Parameters<
     typeof darkModePreference.addEventListener<'change'>
   >[1] = e => {
-    applyThemeToDocument(mode)
+    if (mode === AUTO_MODE) {
+      applyThemeToDocument(mode)
+      updateGiscusTheme(mode) // 系统主题变化时更新 Giscus 主题
+    }
   }
   darkModePreference.addEventListener('change', changeThemeWhenSchemeChanged)
   return () => {
@@ -34,6 +70,7 @@ onMount(() => {
 function switchScheme(newMode: LIGHT_DARK_MODE) {
   mode = newMode
   setTheme(newMode)
+  updateGiscusTheme(newMode) // 切换主题时更新 Giscus 主题
 }
 
 function toggleScheme() {
