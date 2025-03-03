@@ -1035,7 +1035,7 @@ $\therefore$ The time complexity equals to the sum of heights, namely, $O(N)$​
 >
 > Another more efficient way is using **QuickSelection**, a variator of QuickSort. The time complexity will be $O(N)$, namely, linear.
 
-## **$d-$**Heap
+## **$d-$** Heap
 
 > A $d-$heap is a heap whose nodes have $d$ children.
 
