@@ -1,13 +1,10 @@
-# 🍥Fuwari
+# 🍥Rukawa Y.
 
-基于 [Astro](https://astro.build) 开发的静态博客模板。
+基于前端框架 [Astro](https://astro.build) 开发的静态博客模板。
 
-[**🖥️在线预览（Vercel）**](https://fuwari.vercel.app)&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
-[**📦旧 Hexo 版本**](https://github.com/saicaca/hexo-theme-vivia)
+[**🖥️在线预览（Vercel）**](https://rukaway.github.io)&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
 
-> README 版本：`2024-09-10`
-
-![Preview Image](https://raw.githubusercontent.com/saicaca/resource/main/fuwari/home.png)
+![Preview Image](./public/favicon/demo.png)
 
 ## ✨ 功能特性
 
