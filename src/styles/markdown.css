@@ -5,6 +5,7 @@
 
     font-weight: 500;
     font-size: 1.05rem;
+    font-synthesis: weight;
 
     h1, h2, h3, h4, h5, h6 {
         .anchor {
