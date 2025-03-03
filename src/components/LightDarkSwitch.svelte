@@ -38,8 +38,6 @@ function updateGiscusTheme(newMode: LIGHT_DARK_MODE) {
       { giscus: { setConfig: { theme: giscusTheme } } },
       'https://giscus.app',
     )
-  } else {
-    setTimeout(() => updateGiscusTheme(newMode), 500)
   }
 }
 
