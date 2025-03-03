@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://rukaway.github.io/sitemap-index.xml
