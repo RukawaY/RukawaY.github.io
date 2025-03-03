@@ -9,6 +9,10 @@ category: 'Courses'
 draft: false
 ---
 
+:::warning[复习建议]
+复习时建议先过一遍笔记，再刷几套PTA上的往年卷，熟悉一下考法和题型
+:::
+
 # 1  Basis
 
 ## Time complexity  &  Space complexity
