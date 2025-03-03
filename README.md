@@ -1,6 +1,6 @@
 # 🍥Rukawa Y.
 
-A static blog template built with front end frame[Astro](https://astro.build).
+A static blog template built with front end frame [Astro](https://astro.build).
 
 [**🖥️ Live Demo (Vercel)**](https://rukaway.github.io)&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
 [**🌏 中文**](https://github.com/RukawaY/RukawaY.github.io/blob/main/README.zh-CN.md)&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
