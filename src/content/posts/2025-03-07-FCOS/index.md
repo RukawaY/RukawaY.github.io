@@ -19,7 +19,7 @@ FCOS，全称 Fully-Convolutional One-Stage Object Detection，在2019年由澳�
 
 ![](fcos_structure.png)
 
-如图所示，整个模型一共可以分为3大层：Backbone, Feature Pyramid (FPN) 和 Head 输出端。
+如图所示，整个模型一共可以分为3大层：`Backbone`, `Feature Pyramid (FPN)` 和 `Head` 输出端。
 
 :::caution
 以下实现的只是简化版的 FCOS，例如减少了卷积层，删去了 p6，p7，原模型详见文末链接
@@ -115,7 +115,7 @@ class DetectorBackboneWithFPN(nn.Module):
 
 ## Head 输出端
 
-Head 用来实现对目标检测结果的输出。原论文中 Head 共有5个，这里减为3个，且共享权重矩阵。每个 Head 的结构都是：首先4个卷积层，从 p 层中进一步提取特征，之后分为3个分支：`Classification` 用于确定预测框中物体的标签（例如，是足球还是自行车），`Center-ness` 用于量化中心度，对应每个像素点是一个常数，`Regression` 用于确定预测框的大小，是一个4维向量 $\vec{l^\star， t^{\star}, r^\star, b^\star}$，分别对应中心距左、上、右、下边的距离。
+Head 用来实现对目标检测结果的输出。原论文中 Head 共有5个，这里减为3个，且共享权重矩阵。每个 Head 的结构都是：首先4个卷积层，从 p 层中进一步提取特征，之后分为3个分支：`Classification` 用于确定预测框中物体的标签（例如，是足球还是自行车），`Center-ness` 用于量化中心度，对应每个像素点是一个常数，`Regression` 用于确定预测框的大小，是一个4维向量 $(\vec{l^\star}, \vec{t^{\star}}, \vec{r^\star}, \vec{b^\star})$，分别对应中心距左、上、右、下边的距离。
 
 代码实现如下：
 
@@ -176,7 +176,7 @@ class FCOSPredictionNetwork(nn.Module):
 
 # FCOS 训练过程
 
-FCOS 的训练大概可以分为3个阶段：给每一个坐标点分配 GT 框（即真实值），计算 Delta 距离和计算中心度。
+FCOS 的训练大概可以分为4个阶段：给每一个坐标点分配 GT 框（即真实值），匹配坐标点与 GT Box，计算 Delta 距离和计算中心度。
 
 ## 分配 GT 框
 
@@ -225,7 +225,9 @@ p5 层：
 
 ![](output3.png)
 
+:::tip
 可以发现，由于 p3，p4，p5 层的 stride 依次增大，特征图中相同间隔的点在 p3，p4，p5 层中间隔也会依次增大，显得更加稀疏。
+:::
 
 ## 匹配坐标点与 GT Box
 
@@ -377,6 +379,10 @@ $$
 - 中心度的引入可以过滤掉低质量的 box，即 $score_{final} = score_{classification} \times centerness$，如果中心点太接近边缘，centerness 的得分就会比较低，从而使得总得分较低，实现过滤。
 :::
 
+是否引入中心度对模型预测正确率的影响：
+
+![](center.png)
+
 中心度计算代码如下：
 
 ```python
@@ -404,7 +410,7 @@ def fcos_make_centerness_targets(deltas: torch.Tensor):
 
 ## 损失计算
 
-上面提到，FCOS 共有3个输出维度：Object Classification, Box Regression 和 Centerness Regression。因此，总损失是以上三者的和（对于分类是背景的 box，Regression 损失计为0）。
+上面提到，FCOS 共有3个输出维度：`Object Classification`, `Box Regression` 和 `Centerness Regression`。因此，总损失是以上三者的和（对于分类是背景的 box，Regression 损失计为0）。
 
 1. Object Classification
 
@@ -718,9 +724,13 @@ class FCOS(nn.Module):
 
 ![](example1.png)
 
+![](demon.png)
+
 # 总结
 
+作为 Anchor-Free 的经典目标检测模型，FCOS相比于 Anchor-Based 模型极大提高了预测的正确率，在COCO数据集上的 AP 值达到 44.7%，高于 RetinaNet 5.6%， CornerNet 4.2%。FCOS以很小的设计复杂度摆脱了 Anchor-Based 模型导致的复杂计算与超参数调整，并且还可以扩展应用到二阶段检测网络，如 Faster R-CNN 的 RPN 网络中，是一个非常值得学习的目标检测模型。
 
+![](compare.png)
 
 :::important
 论文链接：https://arxiv.org/pdf/1904.01355<br>
